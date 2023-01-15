@@ -124,7 +124,7 @@ void *malloc(size_t size)
 
 void free(void *address)
 {
-    HeapSegHdr *segment = (HeapSegHdr *)((uint64_t)address - sizeof(HeapSegHdr));
+    HeapSegHdr *segment = (HeapSegHdr *)address - 1;
     segment->free = true;
     segment->CombineForward();
     segment->CombineBackward();

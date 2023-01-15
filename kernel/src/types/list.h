@@ -19,6 +19,7 @@ template <typename T> class List
     List<T> clone(); 
     uint64_t getCount();
     uint64_t getCapacity();
+    int64_t getIndexOf(T item);
     void add(T item);
     void removeAt(uint64_t index);
     T& operator[](uint64_t index);
@@ -26,3 +27,4 @@ template <typename T> class List
 };
 
 template class List<int>;
+template class List<Window*>;

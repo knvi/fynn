@@ -1,19 +1,20 @@
 #pragma once
 #include "stdint.h"
+#include "../windows/Window/window.h"
 
-template <typename T> class Array
+template <typename T>
+class Array
 {
-    private:
-    T* arr;
-    T def = T();
+private:
+    T *arr;
     bool freed;
     uint64_t size;
 
-    public:
-    //bool freed;
+public:
+    // bool freed;
     uint64_t getSize();
     Array<T>(uint64_t size);
-    T& operator[](uint64_t index);
+    T &operator[](uint64_t index);
     void free();
     Array<T> clone();
     void copy(Array<T> target);
@@ -21,3 +22,4 @@ template <typename T> class Array
 };
 
 template class Array<int>;
+template class Array<Window *>;

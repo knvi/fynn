@@ -33,8 +33,8 @@ public:
     void Print(const char *chrs, const char *var);
     void Println(const char *chrs, const char *var);
 
-    void Print(const char* chrs, dispVar vars[]); 
-    void Println(const char* chrs, dispVar vars[]);
+    void Print(const char *chrs, dispVar vars[]);
+    void Println(const char *chrs, dispVar vars[]);
     void PrintArg(dispVar var);
 
     void Print(const char *chrs, uint32_t col);
@@ -47,13 +47,7 @@ public:
 
     void Cls();
 
-    BasicRenderer(Framebuffer *framebuffer, PSF1_FONT *psf1_font)
-    {
-        color = 0xffffffff;
-        CursorPosition = {0, 0};
-        this->framebuffer = framebuffer;
-        this->psf1_font = psf1_font;
-    }
+    BasicRenderer(Framebuffer *framebuffer, PSF1_FONT *psf1_font);
 };
 
 extern BasicRenderer *GlobalRenderer;

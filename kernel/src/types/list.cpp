@@ -65,6 +65,14 @@ uint64_t List<T>::getCapacity()
     return cap;
 }
 
+template <typename T> int64_t List<T>::getIndexOf(T item)
+{
+    for (uint64_t index = 0; index < count; index++)
+        if (arr[index] == item)
+            return index;
+    return -1;
+}
+
 template <typename T>
 void List<T>::add(T item)
 {
@@ -79,7 +87,7 @@ template <typename T>
 void List<T>::clear()
 {
     for (uint64_t i = 0; i < count; i++)
-        arr[i] = T();
+        arr[i] = *((T *)NULL);
 
     count = 0;
 }
@@ -94,7 +102,7 @@ void List<T>::removeAt(uint64_t index)
     {
         arr[i - 1] = arr[i];
     }
-    arr[count] = T();
+    arr[count] = *((T *)NULL);
 
     count--;
 }

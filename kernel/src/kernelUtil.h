@@ -48,6 +48,7 @@ struct KernelInfo
 #include "types/array.h"
 #include "types/list.h"
 
+
 //extern KernelInfo kernelInfo;
 //extern PageTableManager pageTableManager;
 //extern PageFrameAllocator t;

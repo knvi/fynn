@@ -1,30 +1,34 @@
 #include "array.h"
 #include "../memory/heap.h"
 
-template <typename T> Array<T>::Array(uint64_t size)
+template <typename T>
+Array<T>::Array(uint64_t size)
 {
     this->size = size;
-    arr = (T*)malloc(size * sizeof(T));
+    arr = (T *)malloc(size * sizeof(T));
     freed = false;
 }
 
-template <typename T> void Array<T>::reInit(uint64_t size)
+template <typename T>
+void Array<T>::reInit(uint64_t size)
 {
     this->size = size;
     free();
-    arr = (T*)malloc(size * sizeof(T));
+    arr = (T *)malloc(size * sizeof(T));
     freed = false;
 }
 
-template <typename T> T& Array<T>::operator[](uint64_t index)
+template <typename T>
+T &Array<T>::operator[](uint64_t index)
 {
     if (index >= this->size)
-        return this->def;
+        return *((T *)NULL);
 
     return arr[index];
 }
 
-template <typename T> void Array<T>::free()
+template <typename T>
+void Array<T>::free()
 {
     if (freed)
         return;
@@ -35,8 +39,8 @@ template <typename T> void Array<T>::free()
     freed = true;
 }
 
-
-template <typename T> Array<T> Array<T>::clone()
+template <typename T>
+Array<T> Array<T>::clone()
 {
     Array<T> newArr = Array<T>(size);
 
@@ -46,14 +50,15 @@ template <typename T> Array<T> Array<T>::clone()
     return newArr;
 }
 
-
-template <typename T> void Array<T>::copy(Array<T> target)
+template <typename T>
+void Array<T>::copy(Array<T> target)
 {
     for (uint64_t i = 0; i < size; i++)
         target[i] = arr[i];
 }
 
-template <typename T> uint64_t Array<T>::getSize()
+template <typename T>
+uint64_t Array<T>::getSize()
 {
     return size;
 }

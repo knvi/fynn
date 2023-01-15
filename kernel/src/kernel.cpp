@@ -1,57 +1,64 @@
 #include "kernelUtil.h"
 
-extern "C" void _start(BootInfo *bootInfo) {
+extern "C" void _start(BootInfo* bootInfo)
+{  
     KernelInfo kernelInfo = InitializeKernel(bootInfo);
-    PageTableManager *pageTableManager = kernelInfo.pageTableManager;
+    PageTableManager* pageTableManager = kernelInfo.pageTableManager;
 
     osData.kernelInfo = &kernelInfo;
     osData.exit = false;
+    osData.windows = List<Window*>();
 
-    currentUser = &adminUser;
-
-    GlobalRenderer->Cls();
-
-    // {
-    //     dispVar vars[] = {dispVar("test"), dispVar(2), dispVar(0)};
-    //     GlobalRenderer->Println("This is a {0}! Also {2}+2={1}.", vars);
-    // }
-
-    // {
-    //     dispVar vars[] = {dispVar("cool thing"), dispVar(4), dispVar(2)};
-    //     GlobalRenderer->Println("This is a {0}! Also {2}+2={1}.", vars);
-    // }
-
-    GlobalRenderer->Println("TIME: {} s", to_string(PIT::TimeSinceBoot), Colors.bred);
-    GlobalRenderer->Println("TIME: {} ms", to_string((int)(PIT::TimeSinceBoot*1000)), Colors.bred);
-    GlobalRenderer->Println("DIV:  {}", to_string(PIT::Divisor), Colors.bred);
-    GlobalRenderer->Println("FREQ: {} Hz", to_string(PIT::freq), Colors.bred);
-
-    GlobalRenderer->Println();
-
-    for (int i = 0; i < 20; i++)
+    Window* mainWindow;
     {
-        GlobalRenderer->Print("hoi! ");
-        PIT::Sleep(100);
+        mainWindow = (Window*)malloc(sizeof(Window));
+        TerminalInstance* terminal = (TerminalInstance*)malloc(sizeof(TerminalInstance));
+        *terminal = TerminalInstance(&adminUser);
+        *(mainWindow) = Window((DefaultInstance*)terminal, Size(600, 500), Position(10, 10), GlobalRenderer->framebuffer);
+        osData.windows.add(mainWindow);
+
+        activeWindow = mainWindow;
     }
 
-    GlobalRenderer->Println();
-    GlobalRenderer->Println();
+    {
+        Window* window = (Window*)malloc(sizeof(Window));
+        TerminalInstance* terminal = (TerminalInstance*)malloc(sizeof(TerminalInstance));
+        *terminal = TerminalInstance(&guestUser);
+        *(window) = Window((DefaultInstance*)terminal, Size(480, 360), Position(400, 60), GlobalRenderer->framebuffer);
+        osData.windows.add(window);
+    }
 
-    GlobalRenderer->Println("TIME: {} s", to_string(PIT::TimeSinceBoot), Colors.bred);
-    GlobalRenderer->Println("TIME: {} ms", to_string((int)(PIT::TimeSinceBoot*1000)), Colors.bred);
-    GlobalRenderer->Println("DIV:  {}", to_string(PIT::Divisor), Colors.bred);
-    GlobalRenderer->Println("FREQ: {} Hz", to_string(PIT::freq), Colors.bred);
 
-    GlobalRenderer->Println("Kernel Initialised Successfully!!", Colors.yellow);
+    // osData.windows[1]->renderer->Clear(Colors.black);
+    // osData.windows[1]->renderer->color = Colors.white;
 
-    KeyboardPrintStart();
+    osData.windows[1]->renderer->Cls();    
+    osData.windows[1]->renderer->Println("Hello, world!");
+    KeyboardPrintStart(osData.windows[1]);
+    
+
+    //activeWindow = osData.windows[1];
+
+
+    activeWindow->renderer->Cls();
+    activeWindow->renderer->Println("Kernel Initialised Successfully!", Colors.yellow);
+    KeyboardPrintStart(mainWindow);
+    mainWindow->Render();
 
     while(!osData.exit)
     {
-        ProcessMousePacket();
+        //GlobalRenderer->Clear(Colors.black);
+
+        for (int i = 0; i < osData.windows.getCount(); i++)
+            osData.windows[i]->Render();
+
+        PIT::Sleep(200);
+        //asm("hlt");
     }
 
     GlobalRenderer->Clear(Colors.black);
+    GlobalRenderer->color = Colors.white;
     GlobalRenderer->Println("Goodbye.");
-    while(!osData.exit || true);
+    PIT::Sleep(1000);
+
 }
