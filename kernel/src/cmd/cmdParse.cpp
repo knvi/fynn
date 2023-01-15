@@ -10,7 +10,7 @@ void LogError(const char* msg) {
     GlobalRenderer->Println(msg, Colors.bred);
 };
 
-void LogError(const char* msg, const char* msg2) {
+void LogError(const char* msg, const char* var) {
     GlobalRenderer->Println(msg, var, Colors.bred);
 };
 
