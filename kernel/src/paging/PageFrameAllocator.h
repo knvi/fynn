@@ -29,6 +29,8 @@ public:
 
     uint64_t GetUsedRAM();
 
+    uint64_t GetFreePageCount();  
+
     uint64_t GetReservedRAM();
 
     uint64_t pageBitmapIndex = (uint64_t)0;
